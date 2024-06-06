@@ -1,0 +1,26 @@
+name: Generate changelog from commits
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate CHANGELOG.md
+        run: echo "$(date -u)  -Added Update" >> CHANGELOG.md
+
+ 
+      - name: Commit and push if it changed
+        run: |
+          git diff
+          git config --global user.email actions@github.com
+          git config --global user.name "GitHub Actions"
+          git commit -am "docs(changelog): update CHANGELOG.md" --allow-empty
+          git push  
